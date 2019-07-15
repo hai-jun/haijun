@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XOrderDetailsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap"
+		type="com.haijun.model.XOrderDetails">
+		<result column="order_id" property="orderId" />
+		<result column="goods_id" property="goodsId" />
+		<result column="goods_needsTiexian_count"
+			property="goodsNeedstiexianCount" />
+		<result column="goods_needsZhijuan_count"
+			property="goodsNeedszhijuanCount" />
+		<result column="goods_selled_count" property="goodsSelledCount" />
+		<result column="goods_unit" property="goodsUnit" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		order_id, goods_id, goods_needsTiexian_count,
+		goods_needsZhijuan_count,
+		goods_selled_count, goods_unit
+	</sql>
+	<select id="selectOrderDetail" resultType="map">
+		SELECT
+		od.id,
+		od.detail_name,
+		ts.goods_name,
+		od.goods_needsTiexian_count,
+		od.goods_needsZhijuan_count,
+		od.goods_selled_count,
+		od.goods_unit
+		FROM
+		tx_order_details od
+		LEFT JOIN tx_stock ts ON od.goods_id = ts.goods_id
+		WHERE
+		od.order_id = #{orderId}
+	</select>
+	<select id="getOrderDetailForSelect" resultType="map">
+		SELECT
+		od.detail_name,od.id
+		FROM tx_order_details od
+		WHERE od.order_id = #{orderId}
+	</select>
+</mapper>

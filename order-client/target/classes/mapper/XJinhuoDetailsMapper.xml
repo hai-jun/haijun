@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XJinhuoDetailsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap"
+		type="com.haijun.model.XJinhuoDetails">
+		<result column="jinhuo_numbers" property="jinhuoNumbers" />
+		<result column="goods_id" property="goodsId" />
+		<result column="goods_count" property="goodsCount" />
+		<result column="goods_singlePrice" property="goodsSingleprice" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		jinhuo_numbers, goods_id, goods_count, goods_singlePrice
+	</sql>
+	<select id="selectDetails" resultType="map">
+		SELECT (SELECT
+		ts.goods_name from tx_stock ts WHERE ts.goods_id = jd.goods_id) AS
+		goods_name,
+		jd.id,
+		jd.goods_count,
+		jd.goods_singlePrice,
+		jd.smailtatal,
+		jd.unit,
+		jd.remarks
+		FROM tx_jinhuo_details jd
+		WHERE jd.jinhuo_numbers = #{jinhuoNumber}
+	</select>
+</mapper>

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XOrderMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.haijun.model.XOrder">
+		<id column="order_id" property="orderId" />
+		<result column="company_name" property="companyName" />
+		<result column="create_date" property="createDate" />
+		<result column="end_date" property="endDate" />
+		<result column="person" property="person" />
+		<result column="order_status" property="orderStatus" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		order_id, company_name, create_date, end_date, person,
+		order_status
+	</sql>
+
+	<select id="getOrderListPage"
+		resultType="com.haijun.model.XOrder">
+		SELECT *
+		FROM tx_order o
+		WHERE 1=1
+		<if test='arg1.orderId != null and arg1.orderId != ""'>
+			and o.order_id LIKE CONCAT('%',#{arg1.orderId},'%')
+		</if>
+		<if test='arg1.companyName != null and arg1.companyName != ""'>
+			AND o.company_name LIKE
+			CONCAT('%',#{arg1.companyName},'%')
+		</if>
+		<if test='arg1.createDateOn != null and arg1.createDateOn != ""'>
+			<if test='arg1.createDateEnd != null and arg1.createDateEnd != ""'>
+				AND o.create_date BETWEEN #{arg1.createDateOn} AND
+				#{arg1.createDateEnd}
+			</if>
+			<if test='arg1.createDateEnd == null or arg1.createDateEnd == ""'>
+				<![CDATA[AND o.create_date >= #{arg1.createDateOn} ]]>
+
+			</if>
+		</if>
+		<if test='arg1.createDateOn == null or arg1.createDateOn == ""'>
+			<if test='arg1.createDateEnd != null and arg1.createDateEnd != ""'>
+				<![CDATA[ AND o.create_date <= #{arg1.createDateEnd}]]>
+
+			</if>
+		</if>
+		<if test="arg1.orderStatus != null and arg1.orderStatus != null">
+			and o.order_status = #{arg1.orderStatus}
+		</if>
+		ORDER BY o.create_date DESC
+	</select>
+
+	<update id="closeOrder" parameterType="map">
+		UPDATE tx_order o
+		SET
+		o.order_status = #{orderStatus},o.end_date = #{endDate}
+		WHERE
+		o.order_id = #{orderId}
+	</update>
+
+	<select id="getFinished" resultType="map">
+		SELECT
+		LEFT(o.end_date,7) date,IFNULL(count(1),0) count
+		FROM tx_order o
+		WHERE o.order_status = 1 AND o.end_date LIKE CONCAT(#{year},'-%')
+		GROUP BY LEFT(o.end_date,7)
+	</select>
+</mapper>

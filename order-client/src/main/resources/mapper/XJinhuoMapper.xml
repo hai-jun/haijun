@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XJinhuoMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.haijun.model.XJinhuo">
+		<id column="jinhuo_number" property="jinhuoNumber" />
+		<result column="jinhuo_date" property="jinhuoDate" />
+		<result column="jinhuo_totalPrice" property="jinhuoTotalprice" />
+		<result column="jinhuo_person" property="jinhuoPerson" />
+		<result column="jinhuo_company" property="jinhuoCompany" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		jinhuo_number, jinhuo_date, jinhuo_totalPrice,
+		jinhuo_person, jinhuo_company
+	</sql>
+	<select id="getJHList" resultType="XJinhuo">
+		SELECT
+		jh.jinhuo_number,jh.jinhuo_company,jh.jinhuo_date,jh.jinhuo_person,jh.jinhuo_totalPrice,jh.remarks
+		FROM tx_jinhuo jh
+		WHERE jh.jinhuo_number LIKE
+		CONCAT('%',#{arg1.jinhuoNumber},'%')
+		AND jh.jinhuo_company LIKE
+		CONCAT('%',#{arg1.jinhuoCompany},'%')
+		AND jh.jinhuo_date LIKE
+		CONCAT(#{arg1.jinhuoDate},'%')
+	</select>
+
+	<select id="getZhichu" resultType="double">
+		SELECT
+		IFNULL(SUM(tj.jinhuo_totalPrice),0)
+		FROM tx_jinhuo tj
+		WHERE tj.jinhuo_date LIKE CONCAT(#{year},'-%',#{month},'-%')
+	</select>
+</mapper>

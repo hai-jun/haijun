@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XSysLogsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap"
+		type="com.haijun.model.XSysLogs">
+		<id column="id" property="id" />
+		<result column="date" property="date" />
+		<result column="value" property="value" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		id, date, value
+	</sql>
+	<select id="selectLogs" resultType="XSysLogs">
+		SELECT sl.id,sl.date,sl.`value`
+		FROM tx_sys_logs sl
+		ORDER BY sl.date desc
+	</select>
+</mapper>

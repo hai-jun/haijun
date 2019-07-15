@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XSellDetailsMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap"
+		type="com.haijun.model.XSellDetails">
+		<result column="sell_numbers" property="sellNumbers" />
+		<result column="goods_id" property="goodsId" />
+		<result column="goods_singlePrice" property="goodsSingleprice" />
+		<result column="goods_count" property="goodsCount" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		sell_numbers, goods_id, goods_singlePrice, goods_count
+	</sql>
+	<select id="selectSellDetails" resultType="map">
+		SELECT od.detail_name
+		AS detailName,
+		sd.sell_numbers AS sellNumbers,
+		sd.goods_singlePrice AS
+		goodsSinglePrice,
+		sd.goods_count AS goodsCount,
+		sd.smail_total AS
+		smailTotal,
+		sd.remarks
+		FROM tx_sell_details sd
+		LEFT JOIN tx_order_details
+		od on od.id = sd.order_details_id
+		WHERE sd.sell_numbers = #{sellNumber}
+	</select>
+	<select id="getGoodsTotalList" resultType="map">
+		SELECT SUM(sd.smail_total)AS value,(select tx_stock.goods_name from tx_stock
+		where tx_stock.goods_id = od.goods_id) AS `name`
+		FROM tx_sell_details sd INNER JOIN tx_order_details od on
+		sd.order_details_id = od.id
+		INNER JOIN tx_sell ON tx_sell.sell_numbers = sd.sell_numbers
+		WHERE tx_sell.sell_date LIKE CONCAT(#{date},'%')
+		GROUP BY `name`
+	</select>
+</mapper>

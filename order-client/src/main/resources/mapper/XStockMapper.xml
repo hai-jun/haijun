@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XStockMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.haijun.model.XStock">
+		<id column="goods_id" property="goodsId" />
+		<result column="goods_name" property="goodsName" />
+		<result column="goods_unit" property="goodsUnit" />
+		<result column="goods_count" property="goodsCount" />
+		<result column="goods_price" property="goodsPrice" />
+		<result column="goods_tips" property="goodsTips" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		goods_id, goods_name, goods_unit, goods_count, goods_price,
+		goods_tips
+	</sql>
+	<select id="getStock" resultType="XStock">
+		select
+		<include refid="Base_Column_List"></include>
+		FROM tx_stock ts
+		<!-- WHERE ts.goods_id = #{goodsId} and ts.goods_name LIKE CONCAT('%',#{goodsName},'%') -->
+	</select>
+	<update id="updataStock">
+		UPDATE
+		tx_stock SET goods_count = #{goodsCount}
+		WHERE goods_id = #{goodsId}
+	</update>
+	<select id="selectStock" resultType="map">
+		SELECT ts.goods_id,ts.goods_name,ts.goods_count
+		FROM tx_stock ts
+	</select>
+</mapper>

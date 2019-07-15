@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.haijun.mapper.XSellMapper">
+
+	<!-- 通用查询映射结果 -->
+	<resultMap id="BaseResultMap" type="com.haijun.model.XSell">
+		<id column="sell_numbers" property="sellNumbers" />
+		<result column="order_id" property="orderId" />
+		<result column="sell_person" property="sellPerson" />
+		<result column="sell_date" property="sellDate" />
+		<result column="sell_totalPrice" property="sellTotalprice" />
+	</resultMap>
+
+	<!-- 通用查询结果列 -->
+	<sql id="Base_Column_List">
+		order_id, sell_numbers, sell_person, sell_date, sell_totalPrice
+	</sql>
+	<select id="totalPriceByMonth" resultType="double">
+		SELECT
+		IFNULL(SUM(ts.sell_totalPrice),0)
+		FROM tx_sell ts
+		WHERE ts.sell_date LIKE CONCAT(#{year},'-%',#{month},'-%')
+	</select>
+</mapper>

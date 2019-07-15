@@ -1,0 +1,25 @@
+server:
+ port: 8888
+  
+eureka:
+  client:
+    serviceUrl:
+      defaultZone: http://${HAIJUN_SERVER_ADDRESS:localhost}:1002/eureka/
+  instance:
+    prefer-ip-address: true
+    
+spring:
+  application:
+    name: server-config
+  cloud:
+    config:
+      server:
+        git:
+          uri: ${HAIJUN_CONFIG_ADDRESS:https://gitee.com/funton/haijun-config.git}
+          username: ${HAIJUN_SERVER_USERNAME:13246169695@163.com}
+          password: ${HAIJUN_SERVER_PASSWORD:151627112945my}
+
+#关闭安全验证  
+management:
+  security:
+    enabled: false
