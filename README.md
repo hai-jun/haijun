@@ -1,2 +1,4 @@
-# haijun
-haijun-back
+# haijun后台
+haijun物料管理系统是一款基于springcloud+vue实现的前后端完全分离的后台管理系统
+数据库使用的是关系型数据库mysql 
+包装请求，前后端交互使用restful风格，请求需经过token验证，也可以自定义不经过token验证的请求路径
