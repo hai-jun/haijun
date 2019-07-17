@@ -1,5 +1,7 @@
 # haijun后台
 
+由于是从码云转移到github的，所以提交次数会很少
+
 haijun物料管理系统是一款基于springcloud+vue实现的前后端完全分离的后台管理系统
 
 数据库使用的是关系型数据库mysql 
